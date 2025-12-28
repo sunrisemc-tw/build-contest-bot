@@ -14,8 +14,7 @@ const {
   ModalBuilder, 
   TextInputBuilder, 
   TextInputStyle,
-  AttachmentFlagsBitField,
-  BitField
+  ChannelType
 } = require('discord.js');
 
 const client = new Client({ intents: [
@@ -168,6 +167,8 @@ client.on('messageCreate', async (message) => {
                         components: [actionRow],
                         files: attachments
                     });
+
+                    if(client.channels.cache.get(discord_channel).type == ChannelType.GuildAnnouncement) post.crosspost();
 
                     con.query(`INSERT INTO build (uuid, name, description, score, available, owner, vote, at, msgId) VALUES (?, ?, ?, '{}', true, ?, '[]', ?, ?)`, [info.id, info.name, info.description, `<@${message.author.id}>`, info.coordinates, post.id])
 
