@@ -96,7 +96,7 @@ async function total(scoreDic, interaction) {
     return adminTotalScore;
 }
 
-client.on("clientReady", async () => {
+client.on("ready", async () => {
   console.log(`bot on -> @${client.user.tag}`);
   client.user.setActivity("我好建", { type: ActivityType.Playing });
 })
@@ -165,7 +165,11 @@ client.on('messageCreate', async (message) => {
                     const post = await client.channels.cache.get(discord_channel).send({
                         content: `# <a:3469pepeparty:1208317114679824394> 新建築來了！\n## 建築名稱 「${info.name}」\n## 建築說明 「${info.description}」`,
                         components: [actionRow],
-                        files: attachments
+                        files: attachments,
+                        allowedMentions: { 
+                            parse: [], 
+                            repliedUser: false 
+                        }
                     });
 
                     if(client.channels.cache.get(discord_channel).type == ChannelType.GuildAnnouncement) post.crosspost();
@@ -347,7 +351,10 @@ WHERE owner = @author;`, [btn.id], async (err, result) => {
                                 newContent += warningText;
                             }
                         }
-                        await message.edit(newContent);
+                        await message.edit({
+                            content: newContent,
+                            allowedMentions: { parse: [] }
+                        });
                     } catch (e) {
                         console.log(`無法更新訊息 ${build.msgId}:`, e.message);
                     }
